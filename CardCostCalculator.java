@@ -11,106 +11,159 @@ public class CardCostCalculator {
     //legendary is 5000 instead of 8000 (5k vs. 8k)                            v here v
     private static final int[] gold =  {0, 5, 20, 50, 150, 400, 1000, 2000, 4000, 8000, 20000, 50000, 100000};
     private static final int[] cards = {1, 2, 4,  10, 20,  50,  100,  200,  400,  800,  1000,  2000,  5000};
-    private static final int[] exp =   {0, 4, 5,  6,  10,  25,  50,   100,  200,  400,  600,   800,   1600};
-    private static final int[] cap = {250, 100, 50, 10};
+    private static final int[] points =   {0, 4, 5,  6,  10,  25,  50,   100,  200,  400,  600,   800,   1600};
+    private static final int[] cardCap = {250, 100, 50, 10};
+
+
+    private static int rarity = 0;
+    private static int level = 0;
+    private static int cardStart = 0;
+    private static int cost = 0;
+    private static int exp = 0;
 
     public static void main(String[] args) {
 
         Scanner scans = new Scanner(System.in);
-        String input;
-        int rarity = 0;
-        int level = 0;
-        int cardStart = 0;
-        int cardEnd = 0;
-
 
         //input: [rarity] [level] [cardStart]
-        rarity = makeRarity(scans);
-        level = makeLevel(scans);
-        cardStart = makeCardStart(scans);
+        makeRarity(scans);
+        makeLevel(scans);
+        makeCardStart(scans);
 
-        System.out.printf("[DEBUG] rarity:%d, level:%d, cardStart:%d\n", rarity, level, cardStart);
+        //System.out.printf("[DEBUG] rarity:%d, level:%d, cardStart:%d, gold:%d\n", rarity, level, cardStart, cost);
+        calculate();
+        //System.out.printf("[DEBUG] rarity:%d, level:%d, cardStart:%d, gold:%d\n", rarity, level, cardStart, cost);
 
     } //main
 
-    private static int makeRarity(Scanner scans) {
-        int result = 0;
+
+    /* makeRarity(Scanner scans)
+     * Prompts the user for card rarity input. Scans only the first character of their input.
+     * If the character matches Common, Rare, Epic, or Legendary, it will read that letter and
+     * assign that rarity. If input does not match, it will prompt again until successful.
+     */
+    private static void makeRarity(Scanner scans) {
         String input;
 
-        System.out.printf("[CardCostCalculator] Please input card rarity (c/r/e/l): ");
+        System.out.printf("[CCC] Please input card rarity (c/r/e/l): ");
         rarity:
         while (scans.hasNext()) {
             input = scans.nextLine();
+            input = input.toLowerCase();
             if (input.length() == 0) {
-                System.out.printf("In valid input. Please enter rarity [c/r/e/l]: ");
+                System.out.printf("[CCC] Invalid input. Please enter rarity [c/r/e/l]: ");
                 continue;
             }
             char ch = input.charAt(0);
             switch (ch) {
                 case 'c':
-                    result = COMMON;
+                    rarity = COMMON;
                     break rarity;
                 case 'r':
-                    result = RARE;
+                    rarity = RARE;
                     break rarity;
                 case 'e':
-                    result = EPIC;
+                    rarity = EPIC;
                     break rarity;
                 case 'l':
-                    result = LEGENDARY;
+                    rarity = LEGENDARY;
                     break rarity;
                 default:
-                    System.out.printf("In valid input. Please enter rarity [c/r/e/l]: ");
+                    System.out.printf("[CCC] Invalid input. Please enter rarity [c/r/e/l]: ");
             }
 
         } //rarity
 
-        return result;
     } //makeRarity
 
-    private static int makeLevel(Scanner scans) {
-        int result = 0;
+
+    /* makeLevel(Scanner scans)
+     * Prompts the user for the level the card is at. This will be asked after the rarity is give,
+     * so there will be a boundary between the lowest possible level and level 13 (max). Keeps prompting
+     * until successful input. (int input)
+     */
+    private static void makeLevel(Scanner scans) {
         String input;
 
-        System.out.printf("[CardCostCalculator] Please input current level (1-13): ");
+        System.out.printf("[CCC] Please input current level (%d-13): ", rarity+1);
         while (scans.hasNext()) {
             input = scans.nextLine();
             try {
-                result = Integer.parseInt(input);
-                if (result>= 1 && result<= 13) {
+                level = Integer.parseInt(input);
+                if (level >= (rarity+1) && level <= 13) {
                     break;
                 }
             }
             catch (NumberFormatException e) {
-                result= 0;
+                level = 0;
             }
-            System.out.printf("[CardCostCalculator] Invalid input. Please input card level (1-13): ");
+            System.out.printf("[CCC] Invalid input. Please input card level (%d-13): ", rarity+1);
         } //level
 
-        return result;
     } //makeLevel
 
-    private static int makeCardStart(Scanner scans) {
-        int result = 0;
+
+    /* makeCardStart(Scanner scans)
+     * Prompts the user for how many cards they currently have of the card. This will be used for
+     * calculating how far they can progress leveling it. Keeps prompting until successful. (int input)
+     */
+    private static void makeCardStart(Scanner scans) {
         String input;
 
-        System.out.printf("[CardCostCalculator] Please input card count: ");
+        System.out.printf("[CCC] Please input card count: ");
         while (scans.hasNext()) {
             input = scans.nextLine();
             try {
-                result = Integer.parseInt(input);
-                if (result >=0) {
+                cardStart = Integer.parseInt(input);
+                if (cardStart >=0) {
                     break;
                 }
             }
             catch (NumberFormatException e) {
-                result = 0;
+                cardStart = 0;
             }
-            System.out.printf("[CardCostCalculator] Invalid input. Please input card count: ");
+            System.out.printf("[CCC] Invalid input. Please input card count: ");
         } //cardStart
 
-        return result;
     }
 
+
+    /* calculate()
+     * Replies, level by level, the accumulative cost, exp, and cards remaining after the level up.
+     * Then shows final result if followed all the way through the upgrades.
+     */
+    private static void calculate() {
+        int x = 0; //used to ease card cap checking
+
+        System.out.printf("\n[CCC] NOTE: All values are accumulative from previous step!\n");
+        while (level < 13 && cardStart > 0) {
+            if (cardStart >= cards[level-rarity]) {
+                cardStart -= cards[level-rarity];
+                if (rarity == LEGENDARY && level == 9) cost += 5000;
+                else cost += gold[level];
+                exp += points[level];
+                level++;
+                System.out.printf("[CCC] To level %2d (%4d cards): -%6dg, %4d cards left\n",
+                        level, cards[level-1-rarity], cost, cardStart); //+%4decp
+            }
+            else break;
+        }
+        if (level == 13) {
+            switch (rarity) {
+                case 0: x = 0; break;
+                case 2: x = 1; break;
+                case 5: x = 2; break;
+                case 8: x = 3; break;
+                default: x = 0;
+            }
+            if (cardStart > cardCap[x]) cardStart = cardCap[x];
+        }
+        if (level < 13) {
+            System.out.printf("[CCC] This leaves you with (%d/%d) cards towards level (%d) having spent %dg\n", cardStart, cards[level - rarity], level + 1, cost);
+        }
+        else if (level == 13) {
+            System.out.printf("[CCC] Level 13! %d/%d extra\n", cardStart, cardCap[x]);
+        }
+    }
 
 } //CardCostCalculator

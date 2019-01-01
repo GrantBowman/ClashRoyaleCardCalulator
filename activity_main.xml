@@ -116,7 +116,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="output 0"
-                android:textSize="20dp"/>
+                android:textSize="12dp"/>
 
         </RelativeLayout>
     </LinearLayout>

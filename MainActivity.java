@@ -1,10 +1,12 @@
 package edu.purdue.gbowman.cardcostcalulator;
 
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,7 +24,16 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup rarity_radio_group;
     private EditText amount_edit_text;
     private TextView output_text_view;
+    private Button calculate_button;
     private List<String> level_values = new ArrayList<>();
+    private Calculator ccc = new Calculator();
+
+
+    // 9, 7, 4, 1
+    private static final int COMMON = 0;
+    private static final int RARE = 2;
+    private static final int EPIC = 5;
+    private static final int LEGENDARY = 8;
 
 
 
@@ -29,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\nXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
         //initialize the view widgets
         card_level_spinner = findViewById(R.id.card_level_spinner);
@@ -36,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         amount_edit_text = findViewById(R.id.amount_edit_text);
         output_text_view = findViewById(R.id.output_text_view);
         output_text_view.setText("output 1");
+        calculate_button = findViewById(R.id.calculate_button);
 
         //make the level values in the level list
         for (int i = 1; i <= 13; i++) {
@@ -53,28 +67,20 @@ public class MainActivity extends AppCompatActivity {
 //        int[] levels = {1,2,3,4,5,6,7,8,9,10,11,12,13};
 
         //Initialize Category Spinner
-//        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(this,
-//                android.R.layout.simple_spinner_dropdown_item,
-//                level_values);
-//        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(this,
-//                android.R.layout.simple_spinner_item,
-//                level_values);
         ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_item,
                 level_values);
         card_level_spinner.setAdapter(spinnerArrayAdapter);
-        card_level_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                //
-            }
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-                //card_level_spinner.setSelection(0);
-            }
-        });
 
+        Button.OnClickListener calculate_button_listener = new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buttonListener();
+            }
+        };
+        calculate_button.setOnClickListener(calculate_button_listener);
+
+//        output_text_view.setTypeface(Typeface.MONOSPACE);
 
     }//onCreate
 
@@ -100,6 +106,37 @@ public class MainActivity extends AppCompatActivity {
                         output_text_view.setText("how are we here");
                 }
                 System.out.printf("[debug] onCheckChanged Radio group (%d)\n", i);
+    }//radioListener
+
+    private void buttonListener() {
+        //get info
+        int level = card_level_spinner.getSelectedItemPosition() + 1;
+        int rarity = rarity_radio_group.indexOfChild(findViewById(rarity_radio_group.getCheckedRadioButtonId()));
+        int cardCount = 0;
+        //get card amount
+        System.out.println(amount_edit_text.getText().toString());
+        try {
+            cardCount = Integer.parseInt(amount_edit_text.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            cardCount = 0;
+        }
+
+        //make sure level matches rarity
+        if (level < ccc.rarityToOffset(rarity)) {
+            output_text_view.setText("Invalid level for chosen rarity!");
+            System.out.println("Invalid level for chosen rarity!");
+            return;
+        }
+
+        System.out.printf("level = %d\n", level);
+        System.out.printf("rarity = %d\n", rarity);
+        System.out.printf("cards = %d\n", cardCount);
+        String result = ccc.calculate(rarity, level, cardCount);
+        System.out.println(result);
+//        output_text_view.setText(String.format(Locale.US, "l=%d, r=%d, c=%d\n", level, rarity, cardCount));
+        output_text_view.setText(result);
+
     }
 
 }//MainActivity

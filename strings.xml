@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">CardCostCalulator</string>
-    <string name="calculate_button_text">Calculate progress!</string>
+    <string name="calculate_button_text">Calculate Progress!</string>
+    <string name="welcome_text">Welcome to the Card Cost Calculator!</string>
 </resources>

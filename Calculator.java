@@ -11,9 +11,10 @@ public class Calculator {
     private static final int LEGENDARY = 3;
 
     //legendary is 5000 instead of 8000 (5k vs. 8k)                            v here v
-    private static final int[] gold = {0, 5, 20, 50, 150, 400, 1000, 2000, 4000, 8000, 20000, 50000, 100000};
-    private static final int[] cards = {1, 2, 4, 10, 20, 50, 100, 200, 400, 800, 1000, 2000, 5000};
-    private static final int[] points = {0, 4, 5, 6, 10, 25, 50, 100, 200, 400, 600, 800, 1600};
+    //                           level:  1  2  3   4   5    6    7     8     8     9     10     11     12      13
+    private static final int[]   gold = {0, 5, 20, 50, 150, 400, 1000, 2000, 4000, 8000, 20000, 50000, 100000, 0};
+    private static final int[]  cards = {1, 2, 4 , 10, 20 , 50 , 100 , 200 , 400 , 800 , 1000 , 2000 , 5000,   0};
+    private static final int[] points = {0, 4, 5 , 6 , 10 , 25 , 50  , 100 , 200 , 400 , 600  , 800  , 1600,   0};
     //card cap overflow was removed in a recent update!
     //private static final int[] cardCap = {250, 100, 50, 10};
 
@@ -76,7 +77,7 @@ public class Calculator {
         //buffer the output text in the StringBuffer to return at the end
         StringBuilder sb = new StringBuilder();
 
-        sb.append(String.format(Locale.US, "\n[CCC] NOTE: Values shown as (per stage): accumulative\n"));
+        sb.append(String.format(Locale.US, "[CCC] NOTE: Values shown as (per stage): accumulative\n"));
 
         //calculation loop, adding cost, exp, and level while decrementing card #
         while (level < 13 && cardStart > 0) {
@@ -92,11 +93,6 @@ public class Calculator {
             }
             else break;
         }
-        //card cap overflow was removed in a recent update!
-//        if (level == 13) {
-//            x = rarity;
-//            if (cardStart > cardCap[x]) cardStart = cardCap[x];
-//        }
         if (level < 13) {
             sb.append(String.format(Locale.US, "[CCC] This leaves you with (%d/%d) cards towards level %d having spent %dg\n",
                     cardStart, cards[level-offset], level + 1, cost*-1));

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Scroller;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -41,14 +42,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\nXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+//        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\nXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
         //initialize the view widgets
         card_level_spinner = findViewById(R.id.card_level_spinner);
         rarity_radio_group = findViewById(R.id.rarity_radio_group);
         amount_edit_text = findViewById(R.id.amount_edit_text);
         output_text_view = findViewById(R.id.output_text_view);
-        output_text_view.setText("output 1");
+//        output_text_view.setText("output 0");
         calculate_button = findViewById(R.id.calculate_button);
 
         //make the level values in the level list
@@ -64,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         };
 
         rarity_radio_group.setOnCheckedChangeListener(radio_listener);
-//        int[] levels = {1,2,3,4,5,6,7,8,9,10,11,12,13};
 
         //Initialize Category Spinner
         ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(this,
@@ -80,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
         };
         calculate_button.setOnClickListener(calculate_button_listener);
 
-//        output_text_view.setTypeface(Typeface.MONOSPACE);
+        //text output options: scroll so horizontal might work
+//        output_text_view.setScroller(new Scroller());
 
     }//onCreate
 
@@ -91,21 +92,21 @@ public class MainActivity extends AppCompatActivity {
                 int i = rarity_radio_group.indexOfChild(selected_button);
                 switch (i) {
                     case 0:
-                        output_text_view.setText("common selected");
+//                        output_text_view.setText("common selected");
                         break;
                     case 1:
-                        output_text_view.setText("rare selected");
+//                        output_text_view.setText("rare selected");
                         break;
                     case 2:
-                        output_text_view.setText("epic selected");
+//                        output_text_view.setText("epic selected");
                         break;
                     case 3:
-                        output_text_view.setText("legendary selected");
+//                        output_text_view.setText("legendary selected");
                         break;
                     default:
-                        output_text_view.setText("how are we here");
+//                        output_text_view.setText("how are we here");
                 }
-                System.out.printf("[debug] onCheckChanged Radio group (%d)\n", i);
+//                System.out.printf("[debug] onCheckChanged Radio group (%d)\n", i);
     }//radioListener
 
     private void buttonListener() {
@@ -124,17 +125,14 @@ public class MainActivity extends AppCompatActivity {
 
         //make sure level matches rarity
         if (level < ccc.rarityToOffset(rarity)) {
-            output_text_view.setText("Invalid level for chosen rarity!");
-            System.out.println("Invalid level for chosen rarity!");
+            output_text_view.setText(String.format(Locale.US, "Invalid level for chosen rarity!" +
+                    "\nPlease select level %d or higher!", ccc.rarityToOffset(rarity) +1));
+//            System.out.println("Invalid level for chosen rarity!");
             return;
         }
 
-        System.out.printf("level = %d\n", level);
-        System.out.printf("rarity = %d\n", rarity);
-        System.out.printf("cards = %d\n", cardCount);
         String result = ccc.calculate(rarity, level, cardCount);
-        System.out.println(result);
-//        output_text_view.setText(String.format(Locale.US, "l=%d, r=%d, c=%d\n", level, rarity, cardCount));
+//        System.out.println(result);
         output_text_view.setText(result);
 
     }

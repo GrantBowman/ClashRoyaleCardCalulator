@@ -27,7 +27,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight=".15"
                     android:background="@color/commonColor"
-                    android:text="common"
+                    android:text="Common"
                     android:checked="true"/>
 
                 <RadioButton
@@ -36,7 +36,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight=".3"
                     android:background="@color/rareColor"
-                    android:text="rare"/>
+                    android:text="Rare"/>
 
                 <RadioButton
                     android:id="@+id/rarity3_radio"
@@ -44,7 +44,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight=".3"
                     android:background="@color/epicColor"
-                    android:text="epic" />
+                    android:text="Epic" />
 
                 <RadioButton
                     android:id="@+id/rarity4_radio"
@@ -52,7 +52,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight=".15"
                     android:background="@color/legendaryColor"
-                    android:text="legendary" />
+                    android:text="Legendary" />
             </RadioGroup>
         </LinearLayout>
 
@@ -103,6 +103,11 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Copyright 2019 Grant Bowman"
+                android:textAlignment="center"/>
         </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -115,8 +120,10 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
-                android:text="output 0"
-                android:textSize="12dp"/>
+                android:layout_marginTop="5dp"
+                android:text="@string/welcome_text"
+                android:textSize="12dp"
+                android:scrollbars="vertical"/>
 
         </RelativeLayout>
     </LinearLayout>

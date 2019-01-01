@@ -26,23 +26,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight=".15"
-                    android:background="@android:color/holo_blue_light"
-                    android:text="common" />
+                    android:background="@color/commonColor"
+                    android:text="common"
+                    android:checked="true"/>
 
                 <RadioButton
                     android:id="@+id/rarity2_radio"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight=".3"
-                    android:background="@android:color/holo_orange_light"
-                    android:text="rare" />
+                    android:background="@color/rareColor"
+                    android:text="rare"/>
 
                 <RadioButton
                     android:id="@+id/rarity3_radio"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight=".3"
-                    android:background="@android:color/holo_purple"
+                    android:background="@color/epicColor"
                     android:text="epic" />
 
                 <RadioButton
@@ -50,7 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight=".15"
-                    android:background="#baffff"
+                    android:background="@color/legendaryColor"
                     android:text="legendary" />
             </RadioGroup>
         </LinearLayout>
@@ -67,15 +68,57 @@
                 android:layout_height="match_parent"
                 android:layout_weight=".5"
                 android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"/>
+                android:layout_marginRight="15dp" />
 
             <EditText
                 android:id="@+id/amount_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight=".5"
-                android:text="enter amount"/>
+                android:hint="enter amount"
+                android:inputType="number"/>
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/button_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:orientation="horizontal">
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/button_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <Button
+                android:id="@+id/calculate_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="50dp"
+                android:layout_marginLeft="50dp"
+                android:text="@string/calculate_button_text"
+                android:textAllCaps="false"
+                android:background="@color/goldColor"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/text_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:orientation="horizontal">
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/output_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="output 0"
+                android:textSize="20dp"/>
+
+        </RelativeLayout>
     </LinearLayout>
 
 

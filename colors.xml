@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="commonColor">@android:color/holo_blue_light</color>
+    <color name="rareColor">@android:color/holo_orange_light</color>
+    <color name="epicColor">@android:color/holo_purple</color>
+    <color name="legendaryColor">#BAFFFF</color>
+    <color name="goldColor">#FFFF66</color>
+    <!--<color name="goldColor">#FFd700</color>-->
+</resources>
